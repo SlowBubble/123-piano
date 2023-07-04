@@ -1,0 +1,116 @@
+
+
+<!DOCTYPE html>
+<html xmlns = "http://www.w3.org/1999/xhtml">
+<head>
+    <title>Piano</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <link rel="icon" href="images/favicon64.png" sizes="64x64" type="image/vnd.microsoft.icon">
+    <link rel="apple-touch-icon-precomposed" size='64x64' href="images/favicon64.png"/>
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="index.css">
+	<!-- polyfill -->
+    <script src="lib/jquery-3.1.1.js" type="text/javascript"></script>
+
+	<script src="lib/midi.js/inc/shim/Base64.js" type="text/javascript"></script>
+	<script src="lib/midi.js/inc/shim/Base64binary.js" type="text/javascript"></script>
+	<script src="lib/midi.js/inc/shim/WebAudioAPI.js" type="text/javascript"></script>
+	<!-- midi.js package -->
+	<script src="lib/midi.js/js/midi/audioDetect.js" type="text/javascript"></script>
+	<script src="lib/midi.js/js/midi/gm.js" type="text/javascript"></script>
+	<script src="lib/midi.js/js/midi/loader.js" type="text/javascript"></script>
+	<script src="lib/midi.js/js/midi/plugin.audiotag.js" type="text/javascript"></script>
+	<script src="lib/midi.js/js/midi/plugin.webaudio.js" type="text/javascript"></script>
+	<script src="lib/midi.js/js/midi/plugin.webmidi.js" type="text/javascript"></script>
+	<!-- utils -->
+	<script src="lib/midi.js/js/util/dom_request_xhr.js" type="text/javascript"></script>
+	<script src="lib/midi.js/js/util/dom_request_script.js" type="text/javascript"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.5.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script src="index.js" type="text/javascript"></script>
+
+</head>
+<body>
+    <div class='piano-options'>
+        <button id='pedal-toggle'>
+            Pedal toggle
+        </button>
+        <div>Volume control</div>
+        <input id='volume-range' type="range"  min="0" max="100" value="50" />
+        <div>Transpose control</div>
+        <input id='transpose-range' type="range"  min="-12" max="0" value="0" />
+    </div>
+
+  <div class='piano-keyboard'>
+    <div class="keyboard">
+      <ul class="cf" id="numbers">
+        <li><a data-key-code='192' class="key" data-key='-13' data-content='~'><span>~</span></a></li>
+        <li><a data-key-code='49' class="key" data-key='-12' data-content='1'><span>1</span></a></li>
+        <li><a data-key-code='50' class="key" data-key='-11' data-content='2'><span>2</span></a></li>
+        <li><a data-key-code='51' class="key" data-key='-15' data-content='3'><span>3</span></a></li>
+        <li><a data-key-code='52' class="key" data-key='-1' data-content='4'><span>4</span></a></li>
+        <li><a data-key-code='53' class="key " data-key='0' data-content='5'><span>5</span></a></li>
+        <li><a data-key-code='54' class="key" data-key='1' data-content='6'><span>6</span></a></li>
+        <li><a data-key-code='55' class="key" data-key='-12' data-content='7'><span>7</span></a></li>
+        <li><a data-key-code='56' class="key" data-key='11' data-content='8'><span>8</span></a></li>
+        <li><a data-key-code='57' class="key" data-key='12' data-content='9'><span>9</span></a></li>
+        <li><a data-key-code='48' class="key" data-key='13' data-content='0'><span>0</span></a></li>
+        <li><a data-key-code='189' class="key" data-key='28' data-content='-'><span>-</span></a></li>
+        <li><a data-key-code='187' class="key" data-key='23' data-content='='><span>=</span></a></li>
+        <li><a id='delete' data-key-code='8' class="key"  data-key='24' data-content='Del'><span>&#8617;</span></a></li>
+      </ul>
+
+      <ul class="cf" id="qwerty">
+        <li><a id='tab' data-key-code='9' class="key grey-key" data-content='tab'><span>tab</span></a></li>
+        <li><a data-key-code='81' class="key black-key" data-key='-10' data-content='q'><span>q</span></a></li>
+        <li><a data-key-code='87' class="key black-key" data-key='-9' data-content='w'><span>w</span></a></li>
+        <li><a data-key-code='69' class="key grey-key" data-key='-3' data-content='e'><span>e</span></a></li>
+        <li><a data-key-code='82' class="key black-key" data-key='-2' data-content='r'><span>r</span></a></li>
+        <li><a data-key-code='84' class="key black-key" data-key='2' data-content='t'><span>t</span></a></li>
+        <li><a data-key-code='89' class="key black-key" data-key='3' data-content='y'><span>y</span></a></li>
+        <li><a data-key-code='85' class="key grey-key" data-key='9' data-content='u'><span>u</span></a></li>
+        <li><a data-key-code='73' class="key black-key" data-key='10' data-content='i'><span>i</span></a></li>
+        <li><a data-key-code='79' class="key black-key" data-key='14' data-content='o'><span>o</span></a></li>
+        <li><a data-key-code='80' class="key grey-key" data-key='15' data-content='p'><span>p</span></a></li>
+        <li><a data-key-code='219' class="key black-key" data-key='21' data-content='['><span>[</span></a></li>
+        <li><a data-key-code='221' class="key  black-key" data-key='22' data-content=']'><span>]</span></a></li>
+        <li><a data-key-code='220' class="key  black-key" data-key='26' data-content='\'><span>\</span></a></li>
+      </ul>
+      <ul class="cf" id="asdfg">
+        <li><a id='caps' data-key-code='20' class="key alt grey-key" data-content='caps lock'><span>caps lock</span></a></li>
+        <li><a data-key-code='65' class="key" data-key='-8' data-content='a'><span>a</span></a></li>
+        <li><a data-key-code='83' class="key" data-key='-5' data-content='s'><span>s</span></a></li>
+        <li><a data-key-code='68' class="key" data-key='-4' data-content='d'><span>d</span></a></li>
+        <li><a data-key-code='70' class="key" data-key='-17' data-content='f'><span>f</span></a></li>
+        <li><a data-key-code='71' class="key" data-key='4' data-content='g'><span>g</span></a></li>
+        <li><a data-key-code='72' class="key" data-key='7' data-content='h'><span>h</span></a></li>
+        <li><a data-key-code='74' class="key" data-key='8' data-content='j'><span>j</span></a></li>
+        <li><a data-key-code='75' class="key" data-key='31' data-content='k'><span>k</span></a></li>
+        <li><a data-key-code='76' class="key" data-key='16' data-content='l'><span>l</span></a></li>
+        <li><a data-key-code='186' class="key " data-key='19' data-content=';'><span>;</span></a></li>
+        <li><a data-key-code='222' class="key" data-key='20' data-content='"'><span>"</span></a></li>
+        <li><a id='enter' data-key-code='13' class="key" data-content='Enter'><span>Enter</span></a></li>
+      </ul>
+      <ul class="cf" id="zxcvb">
+        <li><a data-key-code='16' class="key shiftleft grey-key" data-content='Shift'><span>Shift</span></a></li>
+        <li><a data-key-code='90' class="key black-key" data-key='-7' data-content='z'><span>z</span></a></li>
+        <li><a data-key-code='88' class="key black-key" data-key='-6' data-content='x'><span>x</span></a></li>
+        <li><a data-key-code='67' class="key black-key" data-key='-19' data-content='c'><span>c</span></a></li>
+        <li><a data-key-code='86' class="key grey-key" data-key='-18' data-content='v'><span>v</span></a></li>
+        <li><a data-key-code='66' class="key black-key" data-key='5' data-content='b'><span>b</span></a></li>
+        <li><a data-key-code='78' class="key black-key" data-key='6' data-content='n'><span>n</span></a></li>
+        <li><a data-key-code='77' class="key grey-key" data-key='29' data-content='m'><span>m</span></a></li>
+        <li><a data-key-code='188' class="key black-key" data-key='30' data-content=','><span>,</span></a></li>
+        <li><a data-key-code='190' class="key black-key" data-key='17' data-content='.'><span>.</span></a></li>
+        <li><a data-key-code='191' class="key black-key" data-key='18' data-content='?'><span>?</span></a></li>
+        <li><a data-key-code='16' class="key shiftright grey-key" data-content='Shift'><span>Shift</span></a></li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
